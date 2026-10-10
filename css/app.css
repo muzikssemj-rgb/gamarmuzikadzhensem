@@ -1,0 +1,199 @@
+/* ============================================================================
+   GAMAR MUZIKA -- app.css
+   Local fonts (offline PWA), menu/registration, end-screen buttons, toasts,
+   fullscreen/app mode and the teacher Admin panel.
+   Loaded BEFORE the inline <style> in index.html, so overrides use `.cabinet ...`
+   selectors for extra specificity.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------- fonts (bundled) */
+@font-face{font-family:'Press Start 2P';font-style:normal;font-weight:400;font-display:swap;
+  src:url(../fonts/press-start-2p-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Press Start 2P';font-style:normal;font-weight:400;font-display:swap;
+  src:url(../fonts/press-start-2p-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;
+  src:url(../fonts/vt323-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;
+  src:url(../fonts/vt323-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+
+.hidden{ display:none !important; }
+
+/* ---------------------------------------------------------------- shared bits */
+.btn.danger{ background:#c93a3a; color:#fff; border-bottom-color:#7d1f1f; }
+.btn.danger:hover{ background:#dc4a4a; }
+.btn[disabled]{ opacity:.45; cursor:not-allowed; transform:none; }
+.btn-row{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; }
+.linklike{
+  font-family:'VT323', monospace; font-size:19px; color:var(--gold); background:none; border:0;
+  text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:6px 8px; min-height:34px;
+}
+.linklike:hover{ color:var(--ink); }
+
+/* ---------------------------------------------------------------- overlays: scroll instead of clipping */
+.cabinet .overlay{
+  overflow-y:auto; justify-content:flex-start; gap:10px; padding:16px 18px;
+  touch-action:pan-y; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+}
+.cabinet .overlay > :first-child{ margin-top:auto; }
+.cabinet .overlay > :last-child{ margin-bottom:auto; }
+.cabinet .overlay.hidden{ display:none; }
+
+/* ---------------------------------------------------------------- menu */
+#menuOverlay .title-big{ font-size:clamp(13px,2.6vw,20px); line-height:1.9; }
+#menuOverlay .title-sub{ margin:0; font-size:clamp(14px,1.9vw,19px); }
+#menuOverlay.is-registered .title-sub{ display:none; }
+.menu-corner{
+  position:absolute; top:8px; left:8px; z-index:3;
+  font-family:'Press Start 2P', monospace; font-size:9px; color:var(--ink-dim);
+  background:rgba(10,8,22,.7); border:2px solid var(--panel-edge); border-radius:6px;
+  padding:9px 10px; min-height:34px; cursor:pointer;
+}
+.menu-corner:hover, .menu-corner:focus-visible{ color:var(--gold); border-color:var(--gold); outline:none; }
+
+.school-badge{
+  display:flex; align-items:center; gap:10px; max-width:92%;
+  border:2px solid var(--panel-edge); background:rgba(255,255,255,.04);
+  border-radius:8px; padding:6px 12px; text-align:left;
+}
+.school-badge img{ width:40px; height:40px; object-fit:contain; border-radius:4px; background:#fff; padding:2px; flex:none; }
+.school-name{ font-size:20px; color:var(--ink); line-height:1.1; }
+.school-kod{ font-size:14px; color:var(--ink-dim); }
+
+.name-grid{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+.name-grid > div{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+#classRow input{ width:200px; }
+#playerNameInput, #playerClassInput, #kodInput{
+  font-family:'VT323', ui-monospace, monospace; font-size:22px; color:var(--ink); background:#0d0b18;
+  border:2px solid var(--panel-edge); border-radius:6px; padding:6px 12px; text-align:center;
+  width:260px; max-width:70vw; min-height:42px; letter-spacing:.5px;
+}
+#playerClassInput::placeholder, #kodInput::placeholder{ color:#5c5480; }
+#playerClassInput:focus, #kodInput:focus{ outline:none; border-color:var(--gold); }
+#playerClassInput.input-error{ border-color:var(--danger); }
+#kodInput{ text-transform:uppercase; width:170px; letter-spacing:3px; }
+.name-field{ margin:0; }
+.name-field label{ font-size:15px; }
+.rec-note{ font-size:15px; color:var(--ink-dim); max-width:460px; margin:6px auto 0; line-height:1.25; }
+.rec-note.is-on{ color:var(--correct); }
+.menu-links{ display:flex; flex-wrap:wrap; justify-content:center; gap:2px 14px; }
+.kod-row{ display:flex; gap:8px; align-items:center; justify-content:center; }
+.kod-row .btn{ padding:11px 14px; }
+
+/* ---------------------------------------------------------------- end screens */
+.rec-status{ font-size:17px; min-height:22px; color:var(--ink-dim); max-width:92%; }
+.rec-status.ok{ color:var(--correct); }
+.rec-status.wait{ color:var(--gold); }
+.rec-status.solo{ color:var(--ink-dim); }
+.cabinet .overlay .btn{ font-size:11px; padding:12px 16px; }
+
+
+/* ---------------------------------------------------------------- result card (for screenshots) */
+.result-card{
+  width:min(420px, 92%); padding:14px 18px 12px; text-align:center;
+  background:linear-gradient(180deg,#241a3d,#15102a); border:3px solid var(--gold); border-radius:12px;
+  box-shadow:0 0 0 4px #05040a, 0 0 24px rgba(255,201,60,.25);
+}
+.result-card.win{ border-color:var(--correct); box-shadow:0 0 0 4px #05040a, 0 0 24px rgba(80,220,120,.25); }
+.rc-game{ font-family:'Press Start 2P', monospace; font-size:9px; color:var(--ink-dim); letter-spacing:1px; }
+.rc-name{ font-size:26px; color:var(--ink); line-height:1.15; margin-top:6px; overflow-wrap:anywhere; }
+.rc-score{ font-family:'Press Start 2P', monospace; font-size:28px; color:var(--gold); margin:8px 0 6px; text-shadow:0 3px 0 #05040a; }
+.rc-line{ font-size:19px; color:var(--ink-dim); line-height:1.2; }
+.rc-high{ font-size:19px; color:var(--ink); margin-top:4px; }
+.rc-high b{ color:var(--gold); font-weight:normal; }
+@media (max-height:520px) and (min-width:560px){
+  .result-card{ padding:8px 14px; } .rc-score{ font-size:20px; margin:4px 0; } .rc-name{ font-size:22px; margin-top:2px; }
+}
+
+/* ---------------------------------------------------------------- fullscreen button */
+.fs-btn{ right:50px !important; }
+.fs-btn svg{ display:block; }
+
+/* ---------------------------------------------------------------- toasts */
+#gmToastHost{
+  position:fixed; left:0; right:0; bottom:max(18px, env(safe-area-inset-bottom)); z-index:3000;
+  display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; padding:0 12px;
+}
+.gm-toast{
+  background:#1d1733; color:var(--ink); border:2px solid var(--panel-edge); border-radius:8px;
+  padding:10px 16px; font-size:18px; max-width:min(560px,94vw); text-align:center; line-height:1.25;
+  box-shadow:0 8px 24px rgba(0,0,0,.5); animation:gmIn .18s ease-out; transition:opacity .3s, transform .3s;
+}
+.gm-toast.ok{ border-color:var(--correct); }
+.gm-toast.bad{ border-color:var(--danger); }
+.gm-toast.out{ opacity:0; transform:translateY(6px); }
+@keyframes gmIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+
+/* ---------------------------------------------------------------- app / fullscreen mode */
+body.app-mode{
+  padding:0; gap:0; justify-content:center; min-height:100vh; min-height:100dvh;
+  padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);
+}
+body.app-mode .page-title, body.app-mode .page-sub, body.app-mode .footnote{ display:none; }
+body.app-mode .cabinet{
+  width:min(100vw, calc((100vh - 12px) * 16 / 9 + 12px));
+  width:min(100vw, calc((100dvh - 12px) * 16 / 9 + 12px));
+  padding:6px; border-radius:0; border-width:0; box-shadow:none;
+}
+body.app-mode .screen-wrap{ border-radius:0; border-width:0; }
+
+
+/* ---------------------------------------------------------------- compact screens (phones)
+   The play-field is a fixed 16:9 box, which is tiny on a phone. Form-like screens (menu, game over,
+   level complete) therefore take over the whole viewport so the registration form and buttons stay
+   comfortable to use. Gameplay itself is unchanged. */
+@media (max-width:700px), (max-height:520px){
+  #menuOverlay, #gameOverOverlay, #winOverlay{
+    position:fixed; inset:0; z-index:200; padding:56px 16px 20px; gap:10px;
+    background:radial-gradient(120% 100% at 50% 0%, #241a3d 0%, #0b0a16 70%);
+    backdrop-filter:none;
+    padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right));
+    padding-bottom:max(20px, env(safe-area-inset-bottom));
+  }
+  #menuOverlay > :first-child, #menuOverlay > :last-child,
+  #gameOverOverlay > :first-child, #gameOverOverlay > :last-child,
+  #winOverlay > :first-child, #winOverlay > :last-child{ margin-top:0; margin-bottom:0; }
+  #menuOverlay::before, #menuOverlay::after,
+  #gameOverOverlay::before, #gameOverOverlay::after,
+  #winOverlay::before, #winOverlay::after{ content:""; flex:1 0 0; }
+  #menuOverlay.hidden, #gameOverOverlay.hidden, #winOverlay.hidden{ display:none; }
+  /* sound / fullscreen buttons stay reachable above the take-over screens */
+  body:has(#menuOverlay:not(.hidden)) .mute-btn,
+  body:has(#gameOverOverlay:not(.hidden)) .mute-btn,
+  body:has(#winOverlay:not(.hidden)) .mute-btn{ position:fixed; z-index:210; top:max(8px, env(safe-area-inset-top)); right:max(8px, env(safe-area-inset-right)); }
+  body:has(#menuOverlay:not(.hidden)) .fs-btn,
+  body:has(#gameOverOverlay:not(.hidden)) .fs-btn,
+  body:has(#winOverlay:not(.hidden)) .fs-btn{ right:max(50px, calc(env(safe-area-inset-right) + 42px)) !important; }
+  .menu-corner{ position:fixed; top:max(8px, env(safe-area-inset-top)); left:max(8px, env(safe-area-inset-left)); }
+  #menuOverlay .title-big{ font-size:clamp(13px,4.6vw,20px); }
+  #playerNameInput, #playerClassInput, #kodInput{ max-width:84vw; }
+  #classRow input{ width:260px; }
+}
+@media (max-height:520px) and (min-width:560px){
+  /* phone in landscape: tighter, title on one line */
+  #menuOverlay, #gameOverOverlay, #winOverlay{ padding-top:46px; gap:6px; }
+  #menuOverlay .title-big br{ display:none; }
+  #menuOverlay .title-big{ font-size:15px; line-height:1.5; }
+  #menuOverlay .title-sub, #menuOverlay .badge-row{ display:none; }
+  .school-badge img{ width:30px; height:30px; }
+  .school-name{ font-size:18px; }
+  .cabinet .overlay .btn{ padding:10px 14px; }
+  .name-grid{ flex-wrap:nowrap; }
+}
+
+/* ---------------------------------------------------------------- iOS install help */
+.pwa-sheet{
+  position:fixed; inset:0; z-index:2500; background:rgba(5,4,10,.82); display:flex; align-items:center; justify-content:center; padding:16px;
+}
+.pwa-sheet > div{
+  background:var(--panel); border:3px solid var(--gold); border-radius:12px; padding:20px 22px; max-width:440px; width:100%;
+  font-size:20px; line-height:1.35; box-shadow:0 0 0 6px #05040a;
+}
+.pwa-sheet h3{ font-size:12px; color:var(--gold); margin:0 0 12px; line-height:1.7; }
+.pwa-sheet ol{ margin:0 0 14px 20px; padding:0; }
+.pwa-sheet li{ margin-bottom:6px; }
+
+@media (prefers-reduced-motion:reduce){ .gm-toast{ animation:none; } }

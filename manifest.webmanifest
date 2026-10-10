@@ -1,0 +1,50 @@
+{
+  "id": "./",
+  "name": "Gamar Muzika: Penerokaan Muzikal Super Dzurri",
+  "short_name": "Gamar Muzika",
+  "description": "Permainan platformer retro yang menguji teori muzik. Percuma untuk semua murid sekolah di Malaysia.",
+  "lang": "ms",
+  "dir": "ltr",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#0b0a16",
+  "theme_color": "#0b0a16",
+  "categories": [
+    "education",
+    "games",
+    "music"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
